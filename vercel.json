@@ -1,0 +1,5 @@
+{
+  "framework": null,
+  "buildCommand": "node tools/build-static.mjs",
+  "outputDirectory": "dist"
+}

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PLAY NICE — isolated renderer QA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eef2ec; color: #213b38; font: 16px/1.5 "Segoe UI", sans-serif; }
+    main { max-width: 1260px; margin: auto; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    p { margin: 8px 0 16px; }
+    button { border: 1px solid #92aaa0; border-radius: 8px; background: #fff9e9; color: #213b38; font: inherit; padding: 9px 14px; cursor: pointer; }
+    button:focus-visible { outline: 3px solid #c78132; outline-offset: 3px; }
+    button:disabled { opacity: .5; cursor: wait; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    #status { padding: 12px 16px; background: #fff9e9; border-radius: 8px; font-weight: 650; }
+    #room { width: 100%; aspect-ratio: 1366 / 768; max-height: 560px; position: relative; overflow: hidden; border: 1px solid #92aaa0; border-radius: 12px; }
+    #results { padding-left: 24px; }
+    #results li { margin: 7px 0; }
+    .pass { color: #135c3e; }
+    .fail { color: #a22d28; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #dfe8e0; padding: 16px; border-radius: 8px; font-size: 13px; }
+    small { display: block; margin: 12px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Isolated renderer QA</h1>
+  <p>This page owns a separate game and renderer. It never loads main.js, sends keyboard input, or accesses the production game tab.</p>
+  <div class="actions">
+    <button id="run" disabled>Run renderer checks</button>
+    <button id="webgl" disabled>Check unavailable WebGL</button>
+    <button id="warm" disabled>Show nursery</button>
+    <button id="cold" disabled>Show horror room</button>
+    <button id="small" disabled>Render 1366 × 768</button>
+    <button id="large" disabled>Render 1920 × 1080</button>
+  </div>
+  <p id="status" role="status" aria-live="polite">Loading isolated renderer…</p>
+  <ol id="results"></ol>
+  <div id="room"></div>
+  <small>The canvas is scaled to this page. Render-size checks are numeric; production HUD/framing still needs the coordinator's screenshots at actual viewport sizes.</small>
+  <details open><summary>Renderer diagnostics and evidence</summary><pre id="diagnostics">Waiting.</pre></details>
+</main>
+<script type="module">
+  import { createScene } from '../src/scene.js';
+  import { createWorld } from '../src/levels.js';
+  import { createGame } from '../src/game.js';
+
+  const host = document.getElementById('room');
+  const status = document.getElementById('status');
+  const results = document.getElementById('results');
+  const diagnostics = document.getElementById('diagnostics');
+  const buttons = [...document.querySelectorAll('button')];
+  const game = createGame();
+  let scene;
+  let busy = false;
+  let before;
+  let after;
+  let failures = 0;
+  const records = [];
+  const resourceFields = ['geometries', 'textures', 'programs', 'trackedGeometries', 'trackedMaterials', 'trackedTextures', 'objectViews'];
+  function require(condition, message) { if (!condition) throw new Error(message); }
+  function setBusy(value) { busy = value; buttons.forEach(button => { button.disabled = value || !scene; }); }
+  function addResult(name, passed, detail = '') {
+    const line = document.createElement('li');
+    line.className = passed ? 'pass' : 'fail';
+    line.textContent = `${passed ? 'PASS' : 'FAIL'} — ${name}${detail ? ': ' + detail : ''}`;
+    results.append(line);
+    records.push({ name, result: passed ? 'PASS' : 'FAIL', detail });
+    if (!passed) failures++;
+  }
+  function check(name, action) {
+    try { const detail = action(); addResult(name, true, detail || ''); }
+    catch (error) { addResult(name, false, error.message); }
+  }
+  function report(extra = {}) {
+    diagnostics.textContent = JSON.stringify({ date: new Date().toISOString(), isolation: 'Private game state; no main.js, input listeners, animation loop, or production hooks.', records, before, after, current: scene?.getDiagnostics(), ...extra }, null, 2);
+  }
+  function stateFor(level, completed = false) {
+    game.state.world = createWorld(level);
+    game.state.phase = level === 1 ? 'LEVEL_1' : 'LEVEL_2';
+    game.state.elapsed = 22;
+    game.state.paused = false;
+    game.state.target = null;
+    game.state.cinematic = null;
+    game.state.capture = null;
+    if (completed && level === 1) {
+      game.state.world.toys[0].status = 'carried';
+      game.state.world.player.carriedToyId = game.state.world.toys[0].id;
+      game.state.world.toys[1].status = 'delivered';
+    }
+    if (completed && level === 2) {
+      game.state.world.switches.forEach(item => { item.disabled = true; });
+      game.state.world.switchCount = 3;
+      game.state.world.exit.unlocked = true;
+      game.state.world.enemy.active = true;
+      game.state.world.enemy.x = 1;
+      game.state.world.enemy.z = 1;
+    }
+    return game.state;
+  }
+  function draw(level, completed = false) {
+    const state = stateFor(level, completed);
+    scene.sync(state, null);
+    scene.render();
+    return state;
+  }
+  async function texturesReady() {
+    const deadline = performance.now() + 10000;
+    while (performance.now() < deadline) {
+      const { assets } = scene.getDiagnostics();
+      if (assets.loaded + assets.failed.length >= assets.requested) return;
+      await new Promise(resolve => setTimeout(resolve, 30));
+    }
+    throw new Error('Textures did not finish within 10 seconds');
+  }
+  function warmResources() {
+    draw(1, false);
+    draw(1, true);
+    draw(2, false);
+    draw(2, true);
+    const state=game.state;
+    Object.assign(state.world.secret,{open:true,slide:1});scene.sync(state,null);scene.render();
+    state.world.player.hiddenIn=state.world.hidingSpots[0].id;
+    for(const peeking of [false,true]){state.world.player.peeking=peeking;scene.sync(state,null);scene.render();}
+    state.world.player.hiddenIn=null;
+    state.capture={player:{...state.world.player},enemy:{x:state.world.enemy.x,z:state.world.enemy.z}};
+    state.phase='CAPTURE';state.phaseElapsed=5.5;scene.sync(state,null);scene.render();
+    draw(1);
+  }
+  async function runChecks() {
+    if (busy || !scene) return;
+    setBusy(true);
+    results.replaceChildren();
+    records.length = 0;
+    failures = 0;
+    status.textContent = 'Waiting for local textures, then warming both levels…';
+    try {
+      await texturesReady();
+      check('All local texture requests loaded', () => {
+        const { assets } = scene.getDiagnostics();
+        require(assets.requested >= 10, `expected at least10 map requests, got ${assets.requested}`);
+        require(assets.loaded === assets.requested && assets.failed.length === 0, JSON.stringify(assets));
+        return `${assets.loaded} loaded / 0 failed; genuine extracted surfaces`; 
+      });
+      warmResources();
+      before = scene.getDiagnostics();
+      check('Rendering and repeated sync do not change logical game state', () => {
+        for (const level of [1, 2]) {
+          const state = stateFor(level, true);
+          const serialized = JSON.stringify(state);
+          scene.sync(state, null);
+          scene.sync(state, null);
+          scene.render();
+          scene.render();
+          require(JSON.stringify(state) === serialized, `level ${level} state changed`);
+        }
+        return 'Both levels; sync twice and render twice';
+      });
+      check('Twenty complete reset/render cycles retain stable resources', () => {
+        const identity = game.state;
+        for (let index = 0; index < 20; index++) {
+          game.state.phase = index % 2 ? 'WIN' : 'LOSE';
+          game.state.score = 1050;
+          game.dispatch('restart');
+          require(game.state === identity && game.state.phase === 'TITLE' && game.state.score === 0, 'coordinator reset failed');
+          warmResources();
+          const current = scene.getDiagnostics();
+          for (const field of resourceFields) require(current[field] === before[field], `cycle ${index + 1}: ${field} grew from ${before[field]} to ${current[field]}`);
+          require(host.querySelectorAll('canvas').length === 1, 'multiple render canvases accumulated');
+        }
+        after = scene.getDiagnostics();
+        return resourceFields.map(field => `${field}=${after[field]}`).join(', ');
+      });
+      for (const [width, height] of [[1366, 768], [1920, 1080]]) {
+        check(`Renderer resize ${width} × ${height} preserves world coordinates`, () => {
+          const state = game.state;
+          const serialized = JSON.stringify(state.world);
+          scene.resize(width, height);
+          scene.sync(state, null);
+          scene.render();
+          const current = scene.getDiagnostics();
+          require(current.width === width && current.height === height, 'renderer size differs');
+          require(JSON.stringify(state.world) === serialized, 'resize altered logical world');
+          return 'Render dimensions correct; logical distances unchanged; visual fit requires inspection';
+        });
+      }
+      scene.resize(1366, 768);
+      draw(1);
+      status.textContent = failures ? `${failures} renderer check(s) failed. See results.` : 'PASS — all renderer checks completed. Production browser checks remain separate.';
+      report();
+    } catch (error) {
+      addResult('Renderer test runner', false, error.message);
+      status.textContent = `FAIL — ${error.message}`;
+      report();
+    } finally { setBusy(false); }
+  }
+  function unavailableWebGL() {
+    if (busy) return;
+    const original = HTMLCanvasElement.prototype.getContext;
+    const probe = document.createElement('div');
+    let unexpectedScene;
+    let message = '';
+    let passed = false;
+    try {
+      HTMLCanvasElement.prototype.getContext = function (type, ...args) { return type === 'webgl2' ? null : original.call(this, type, ...args); };
+      try { unexpectedScene = createScene(probe); }
+      catch (error) { message = error.message; }
+      require(/WebGL 2/.test(message) && /hardware acceleration/i.test(message), `missing readable unsupported message: ${message || 'no error thrown'}`);
+      require(probe.childElementCount === 0, 'unsupported startup left an orphan canvas');
+      passed = true;
+    } catch (error) { message = error.message; }
+    finally { HTMLCanvasElement.prototype.getContext = original; unexpectedScene?.dispose(); }
+    addResult('Forced WebGL 2 unavailable', passed, message);
+    status.textContent = passed ? 'PASS — unavailable WebGL produces a readable setup error; context method restored.' : 'FAIL — unsupported WebGL check. See results.';
+    report({ forcedWebGLMessage: message, getContextRestored: HTMLCanvasElement.prototype.getContext === original });
+  }
+  document.getElementById('run').addEventListener('click', runChecks);
+  document.getElementById('webgl').addEventListener('click', unavailableWebGL);
+  document.getElementById('warm').addEventListener('click', () => { draw(1); report(); });
+  document.getElementById('cold').addEventListener('click', () => { draw(2, true); report(); });
+  for (const [id, width, height] of [['small', 1366, 768], ['large', 1920, 1080]]) document.getElementById(id).addEventListener('click', () => { scene.resize(width, height); scene.sync(game.state, null); scene.render(); report(); });
+  window.addEventListener('pagehide', () => scene?.dispose(), { once: true });
+  try {
+    scene = createScene(host);
+    scene.resize(1366, 768);
+    draw(1);
+    setBusy(false);
+    status.textContent = 'Ready. Run renderer checks to test this isolated instance.';
+    report();
+  } catch (error) {
+    addResult('Create real WebGL renderer', false, error.message);
+    status.textContent = `FAIL — ${error.message}`;
+    report();
+  }
+</script>
+</body>
+</html>

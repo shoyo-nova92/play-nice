@@ -1,0 +1,8 @@
+{
+  "name": "play-nice",
+  "private": true,
+  "version": "5.0.0",
+  "type": "module",
+  "description": "A small, local, two-level 3D playroom horror game.",
+  "scripts": { "start": "node tools/server.mjs", "test": "node --test tests/core.test.mjs tests/audio.test.mjs tests/capture-camera.test.mjs tests/cinematics.test.mjs tests/secret.test.mjs tests/stealth.test.mjs" }
+}

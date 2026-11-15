@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#100f0c">
+  <title>PLAY NICE — After Hours</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23100f0c'/%3E%3Cpath d='M18 48V16h12q12 0 12 10T30 36H18' stroke='%23e7d4a8' stroke-width='5' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<main id="app">
+  <div id="scene" aria-label="First-person view of the nursery"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <header class="brand-strip"><span>PN / NURSERY 04</span><span id="room-label">AFTER HOURS</span></header>
+  <section id="title-menu" class="title-menu" aria-labelledby="game-title">
+    <div class="title-copy"><p class="eyebrow">A SHORT FIRST-PERSON HORROR GAME</p><h1 id="game-title">PLAY<br>NICE<span>.</span></h1><p class="tagline">Every toy has its place.<br>So do you.</p>
+    <button id="start-button" class="primary" type="button">ENTER THE NURSERY <span aria-hidden="true">→</span></button>
+    <p class="start-hint">or press <kbd>Enter</kbd></p>
+    <p class="headphone-note">Headphones recommended. Keep the light close.</p></div>
+    <div class="instructions"><span class="eyebrow">YOUR LAST SHIFT</span><p>A room to clean and arrange.<br>One room to leave behind.</p><dl><div><dt>WASD</dt><dd>Move</dd></div><div><dt>MOUSE</dt><dd>Look</dd></div><div><dt>E</dt><dd>Interact</dd></div><div><dt>F</dt><dd>Torch</dd></div><div><dt>SHIFT</dt><dd>Move quietly</dd></div><div><dt>SPACE</dt><dd>Peek while hidden</dd></div><div><dt>ESC</dt><dd>Pause</dd></div></dl><small>Keyboard look: ← → turn · Q / Z up / down<br>Mouse unavailable? Hold and drag the room.</small></div>
+    <p class="title-note">Please do not disturb the toys.</p>
+  </section>
+  <section id="hud" class="hud" hidden aria-label="Game status">
+    <div class="objective-block"><span id="level-label" class="eyebrow"></span><h2 id="objective"></h2><div class="progress-track"><span id="progress-bar"></span></div><p id="progress-label"></p></div>
+    <div class="numbers"><div class="time-block"><span>REMAINING</span><strong id="timer">02:00</strong></div><div class="score-block"><span>POINTS</span><strong id="score">0000</strong></div></div>
+  </section>
+  <div id="reticle" class="reticle" hidden aria-hidden="true"></div>
+  <div id="play-footer" class="play-footer" hidden><div><span id="carrying"></span><small id="look-hint">WASD move · Mouse look · E interact</small></div><span id="torch-status">F · TORCH ON</span></div>
+  <div id="prompt" class="prompt" hidden></div>
+  <section id="journal-page" hidden><article><span>YOUR CHILD’S STORYBOOK</span><h2>A folded note.</h2><p id="journal-text"></p></article></section>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="sound-controls" class="sound-controls"><button id="mute-button" type="button" aria-pressed="false">SOUND ON · M</button><label>Volume <input id="volume" type="range" min="0" max="100" value="55" aria-label="Sound volume"></label></div>
+  <section id="cinematic" class="cinematic" hidden aria-live="polite"><div id="cinematic-shade" class="cinematic-shade"></div><div class="cinematic-copy"><span class="eyebrow">PLAY NICE SYSTEM</span><h2 id="cinematic-title"></h2><p id="cinematic-subtitle"></p><div id="cinematic-lines"></div><div class="boot-track"><span id="boot-progress"></span></div></div><div class="letterbox top"></div><div class="letterbox bottom"></div></section>
+  <section id="result" class="result" hidden aria-labelledby="result-title"><div class="result-card"><span id="result-status" class="eyebrow"></span><h2 id="result-title"></h2><p id="result-detail"></p><div class="result-score"><span>FINAL SCORE</span><strong id="result-score"></strong></div><button id="restart-button" class="primary" type="button">RETURN TO THE ROOM <span aria-hidden="true">↻</span></button><small>R / Enter to restart</small></div></section>
+  <section id="pause" class="pause" hidden><div><span class="eyebrow">TAKE A BREATH</span><h2>Shift paused.</h2><p>The room can wait.</p><button id="resume-button" class="primary" type="button">CONTINUE <span aria-hidden="true">→</span></button><small>Enter to resume · Your time is safe.</small></div></section>
+  <div id="loading" class="loading"><p>Opening the nursery…</p></div>
+  <section id="fatal-error" class="fatal-error" hidden role="alert"><h1>The room couldn't open.</h1><p id="fatal-message"></p><p>Use the included launcher in Chrome or Edge. Enable graphics acceleration if WebGL is unavailable.</p><button class="primary" type="button" onclick="location.reload()">TRY AGAIN</button></section>
+</main>
+<script type="module">
+  import('./src/main.js').catch(error => {
+    document.getElementById('loading').hidden = true;
+    document.getElementById('fatal-error').hidden = false;
+    document.getElementById('fatal-message').textContent = error.message;
+    document.querySelector('#fatal-error button').focus(); console.error(error);
+  });
+</script>
+</body>
+</html>

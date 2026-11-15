@@ -1,0 +1,205 @@
+{
+  "pipeline": "tools/assets/extract_surfaces.py",
+  "source_package": "Resident Evil Village/re_chunk_000.pak",
+  "package_size_bytes": 29528999518,
+  "textures": [
+    {
+      "file": "wood-floor.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/wood_floorboard_00_001/wood_floorboard_00_001_albm.tex.30",
+      "path_hash": "f2905f85da027c32",
+      "package_offset": 10444417218,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "bbbd09f3c0924b91f6960ee36883a36db98939e45d3a36badf7929a44ce962fd",
+      "tex_sha256": "bbbd09f3c0924b91f6960ee36883a36db98939e45d3a36badf7929a44ce962fd",
+      "png_sha256": "e998a2080f3db592d4862b93c190402de58f8204abcce321f1b47af1d03630df",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Main room floor; repeat 4 x 3; sRGB; roughness 0.82.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Weathered vertical wood grain; sharp consistent decode; suitable dark floor."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true
+    },
+    {
+      "file": "shelf-wood.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/wood_fine_00_001/wood_fine_00_001_albm.tex.30",
+      "path_hash": "6b6dfed313863005",
+      "package_offset": 7211572242,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "f0ce56150e5e778e7f326103fb5cc26c16cd2d642c27b97d7b220efacfbdd5eb",
+      "tex_sha256": "f0ce56150e5e778e7f326103fb5cc26c16cd2d642c27b97d7b220efacfbdd5eb",
+      "png_sha256": "f0d214b9dbdb8933d37500725726729b03ee700972995c0bb01e53b639d0c251",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Shelf wood and small trim; repeat 1-2; sRGB; roughness 0.65.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Warm clean brown grain; sharp consistent decode; suitable bright floor and shelves."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true
+    },
+    {
+      "file": "wall-plaster.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/construction_plaster_01_001/ms_construction_plaster_01_001_albd.tex.30",
+      "path_hash": "53b7222943be3724",
+      "package_offset": 10589338335,
+      "packed_bytes": 1012141,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "517e364155862f96828fe12e399c433bc1947ffa0377087e7e673789165b40c5",
+      "tex_sha256": "a092ac3931a85c0d9437e6f4f84e58027de95b2385eddafc2e095016f214aea5",
+      "png_sha256": "fc60e122020ec0db579710bac2de2806433c553e057b6dd024e0dadb4ce580e4",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Wall plaster under warm or navy tint; repeat 3 x 1; sRGB; roughness 0.95.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Soft off-white mottled plaster; correct subtle surface detail; tint-friendly walls."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true
+    },
+    {
+      "file": "switch-metal.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/metal_bare_01_000/metal_bare_01_000_albm.tex.30",
+      "path_hash": "1329331efa617b57",
+      "package_offset": 5561505432,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "7e7979034fe6786f74039392ac79b8002d52bd2b51138df89553abb622a437fb",
+      "tex_sha256": "7e7979034fe6786f74039392ac79b8002d52bd2b51138df89553abb622a437fb",
+      "png_sha256": "a807d9fa04329ef114576a0a324cc692686f4a44b2b24db95af80f210c9d1801",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Switch and exit trim; sRGB; metalness 0.65; roughness 0.55.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Cool pale scratched metal; correct surface detail; hardware and switch cases."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true
+    },
+    {
+      "file": "worn-metal.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/metal_rust_00_001/metal_rust_00_001_albm.tex.30",
+      "path_hash": "b6da747d0b02a7a5",
+      "package_offset": 1365030298,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "6e18f19697280ae811b68c611f5fed9678560c42d1f8359c5665af9ee1d97d11",
+      "tex_sha256": "6e18f19697280ae811b68c611f5fed9678560c42d1f8359c5665af9ee1d97d11",
+      "png_sha256": "14280fe32660818ff0e3e19590f8637e20a1a48291413d1ccd893db756efe9a7",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Corrupted-room switch casing or exit; sRGB; metalness 0.3; roughness 0.9.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Dark oxidized gray-brown mottling; correct surface detail; corrupted hardware."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true
+    },
+    {
+      "file": "worn-concrete.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/concrete_damaged_01_000/concrete_damaged_01_000_albd.tex.30",
+      "path_hash": "c272b422287f2623",
+      "package_offset": 8228319094,
+      "packed_bytes": 466747,
+      "unpacked_bytes": 699208,
+      "compressed_sha256": "9df24f24d9a37d1618a44c23b927551dc4b9b2a5b0cd4f77e0264294cae5dc61",
+      "tex_sha256": "cf1a7a5d0f6005e07e08678af99510f5a5823ac4d096279ff9f741b66f57a4f9",
+      "png_sha256": "ecbe725b7b211a8d8af4e6b5df430422fcf2d31a6cadbe7cf3b18780e77f8d23",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "usage": "Corrupted lower wall or floor accent; sRGB; roughness 0.95.",
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Light cracked and flaked wall surface; correct surface detail; corrupted wall accents."
+      },
+      "tex_version": 30,
+      "dxgi_format": 72,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 524288,
+      "alpha_discarded": true
+    }
+  ],
+  "source_index": {
+    "file_count": 87481,
+    "header_sha256": "ab11fc55ef24514e61b4d773c33fe415e476f591bbbe120f7a5f9e4e2a7619d8",
+    "index_sha256": "2f9df9e390f03de607b6bc2f0627dcd09f555815a6c246a6a6e3da8f2dae45b9",
+    "fingerprint": 247284855
+  }
+}

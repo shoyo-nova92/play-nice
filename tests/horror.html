@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PLAY NICE — horror and sound QA</title><style>
+*{box-sizing:border-box}body{margin:0;background:#111;color:#ddd;font:13px Segoe UI,sans-serif}header{padding:14px 18px;display:flex;gap:9px;align-items:center;flex-wrap:wrap}button{padding:8px 12px;background:#ddd0ad;color:#161913;border:0;cursor:pointer}#room{height:65vh;width:100%;overflow:hidden}canvas{display:block}pre{font:11px/1.5 Consolas,monospace;padding:18px;white-space:pre-wrap;columns:2}p{margin:8px 18px}h1{font-size:15px;margin:0 20px 0 0}</style></head><body>
+<header><h1>Isolated horror & sound QA</h1><button id="nursery">Nursery / hands</button><button id="window">Night window</button><button id="reveal">Instant red window</button><button id="rest">Seated mascot</button><button id="chase">Awake mascot</button><button id="capture">Capture sequence</button><button id="torch">Toggle torch</button><button id="audio">Start sound sequence</button><button id="mute">Mute / unmute</button><button id="pause">Pause / resume</button></header>
+<p id="status">This isolated fixture imports real renderer/audio modules. It does not alter the production game. Sound sequence: nursery8s → reveal1.35s → pursuit8s → win → repeat. This is not a gameplay win.</p>
+<div id="room"></div><pre id="diagnostics">Loading…</pre>
+<script type="module">
+import {createScene} from '../src/scene.js';import {createWorld} from '../src/levels.js';import {createGame} from '../src/game.js';import {getCinematic} from '../src/cinematics.js';import {createAudio} from '../src/audio.js';
+const game=createGame(), sound=createAudio(), host=document.getElementById('room'), scene=createScene(host);
+let shot=null, sequence=false, seqTime=0, prev=null, reportAt=0, serial=0;
+game.state.phase='LEVEL_1';
+function pose(x,z,yaw=0,pitch=0){Object.assign(game.state.world.player,{x,z,yaw,pitch,facing:{x:-Math.sin(yaw),z:-Math.cos(yaw)}})}
+function fixture(name){
+ sequence=false; shot=null; game.state.world=createWorld(['reveal','chase'].includes(name)?2:1);game.state.phase=game.state.world.level===2?'LEVEL_2':'LEVEL_1';game.state.phaseElapsed=0;
+ if(name==='window'||name==='reveal'){pose(-3,-.2,Math.PI/2,.04)}
+ if(name==='reveal'){game.state.phase='LEVEL_TRANSITION';shot=getCinematic('LEVEL_TRANSITION',.2)}
+ if(name==='rest'||name==='chase'){pose(3.5,2.3,-2.22,-.12)}
+ if(name==='chase'){game.state.world.enemy.active=true;game.state.world.enemy.wakeElapsed=3;}
+}
+for(const id of ['nursery','window','reveal','rest','chase'])document.getElementById(id).onclick=()=>fixture(id);
+document.getElementById('capture').onclick=()=>{fixture('chase');game.state.capture={player:{...game.state.world.player},enemy:{x:game.state.world.enemy.x,z:game.state.world.enemy.z}};game.state.phase='CAPTURE';game.state.phaseElapsed=0;};
+document.getElementById('torch').onclick=()=>{game.state.torchOn=!game.state.torchOn;};
+document.getElementById('mute').onclick=()=>{game.state.muted=!game.state.muted;sound.setMuted(game.state.muted);};
+document.getElementById('pause').onclick=()=>{game.state.paused=!game.state.paused;sound.update(game.state,0);};
+document.getElementById('audio').onclick=()=>{sound.unlock();fixture('nursery');sequence=true;seqTime=0;game.state.elapsed=0;game.state.paused=false;};
+document.addEventListener('visibilitychange',()=>{game.state.paused=document.hidden;sound.update(game.state,0);});
+function resize(){scene.resize(innerWidth,Math.round(innerHeight*.65));}resize();addEventListener('resize',resize);
+function loop(t){
+ const dt=prev===null?0:Math.min(.05,(t-prev)/1000);prev=t;
+ if(!game.state.paused){
+ game.state.elapsed+=dt;game.state.phaseElapsed+=dt;
+ if(sequence){
+ seqTime+=dt;
+ let phase=seqTime<8?'LEVEL_1':seqTime<9.35?'LEVEL_TRANSITION':seqTime<17?'LEVEL_2':'WIN';
+ if(phase!==game.state.phase){game.state.phase=phase;game.state.phaseElapsed=0;game.state.events=[{type:'phase.changed',id:phase,serial:++serial}];if(phase==='LEVEL_2'){game.state.world=createWorld(2);game.state.world.enemy.active=true;game.state.world.enemy.wakeElapsed=3;pose(2,2,-2.1);}}
+ shot=phase==='LEVEL_TRANSITION'?getCinematic(phase,game.state.phaseElapsed):null;
+ if(phase==='LEVEL_2'){game.state.world.enemy.x=3+Math.sin(seqTime)*1.3;game.state.world.enemy.z=4;game.state.world.enemy.wakeElapsed+=dt;game.state.world.player.distanceWalked+=dt*2;}
+ if(seqTime>21){fixture('nursery');sequence=true;seqTime=0;game.state.elapsed=0;}
+ }}
+ sound.update(game.state,dt);game.state.events=[];scene.sync(game.state,shot);scene.render();
+ if(t-reportAt>500){reportAt=t;document.getElementById('diagnostics').textContent=JSON.stringify({fixturePhase:game.state.phase,sequence,paused:game.state.paused,render:scene.getDiagnostics(),audio:sound.getDiagnostics()},null,2);}
+ requestAnimationFrame(loop);
+}requestAnimationFrame(loop);addEventListener('pagehide',()=>{sound.dispose();scene.dispose();},{once:true});
+</script></body></html>

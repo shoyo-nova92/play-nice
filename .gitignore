@@ -1,0 +1,10 @@
+
+backups/
+release/
+dist/
+.vercel/
+node_modules/
+tools/assets/raw/
+tools/assets/references/
+*.log
+test-results/

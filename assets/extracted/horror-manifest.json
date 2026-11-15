@@ -1,0 +1,190 @@
+{
+  "pipeline": "tools/assets/extract_horror_surfaces.py",
+  "decoder_pipeline": "tools/assets/extract_surfaces.py",
+  "source_package": "Resident Evil Village/re_chunk_000.pak",
+  "package_size_bytes": 29528999518,
+  "original_exports_preserved": {
+    "manifest.json": "30b4950296905e6adc234c718fbdb272108733a66306e1cc702e2077cef4cf06",
+    "wood-floor.png": "e998a2080f3db592d4862b93c190402de58f8204abcce321f1b47af1d03630df",
+    "shelf-wood.png": "f0d214b9dbdb8933d37500725726729b03ee700972995c0bb01e53b639d0c251",
+    "wall-plaster.png": "fc60e122020ec0db579710bac2de2806433c553e057b6dd024e0dadb4ce580e4",
+    "switch-metal.png": "a807d9fa04329ef114576a0a324cc692686f4a44b2b24db95af80f210c9d1801",
+    "worn-metal.png": "14280fe32660818ff0e3e19590f8637e20a1a48291413d1ccd893db756efe9a7",
+    "worn-concrete.png": "ecbe725b7b211a8d8af4e6b5df430422fcf2d31a6cadbe7cf3b18780e77f8d23"
+  },
+  "transforms": "Existing source top mip decoded BCn to RGB PNG. Material alpha discarded. No resize, crop, recolor, generated pixels, or upscaling.",
+  "textures": [
+    {
+      "file": "hand-skin.png",
+      "internal_name": "natives/stm/streaming/character/ch/ch01/0000/0050/ch01_0050_rhand_albd.tex.30",
+      "usage": "First-person skin color. Genuine hand UV atlas, not seamless. Sample clean palm on primitive hand parts instead of mapping the entire atlas.",
+      "material": {
+        "roughness": 0.82,
+        "metalness": 0
+      },
+      "uv_guidance": {
+        "source_rectangle_from_top": [
+          0.46,
+          0.34,
+          0.64,
+          0.5
+        ],
+        "three_offset": [
+          0.46,
+          0.5
+        ],
+        "three_repeat": [
+          0.18,
+          0.16
+        ],
+        "note": "Suggested clean-palm rectangle only; atlas also contains finger/nail islands and a dark wrist cuff. Proper anatomical mapping requires compatible mesh UVs."
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        2048,
+        2048
+      ],
+      "source_mip_count": 9,
+      "top_mip_bytes": 4194304,
+      "alpha_discarded": true,
+      "path_hash": "fc7aa6b108d52949",
+      "package_offset": 2556057977,
+      "packed_bytes": 4055452,
+      "unpacked_bytes": 5592568,
+      "compressed_sha256": "1358fecfbd6d1b6ba33841cfee5013627ebd169ca3f654045456af6a42a5d0a1",
+      "tex_sha256": "8e38ec39e7b6e4805fb00f9c85989ceb206f12ab0918e8138e7dfa8b1f5b52f3",
+      "png_sha256": "08b42d91d1d29909cfe077aec99c75b0615c231ab475e9bb08fb6d32efad7c50",
+      "png_bytes": 3432181,
+      "dimensions": [
+        2048,
+        2048
+      ],
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Clean anatomical hand atlas with palms, fingers, nails, and dark cuff. Full resolution inspected; use explicit palm UV rectangle for primitive hands, not full-atlas wrapping."
+      }
+    },
+    {
+      "file": "wall-tiles.png",
+      "internal_name": "natives/stm/streaming/environment/textures/st02_423_villagesouphouseroom_ceramictilebasement_albm.tex.30",
+      "usage": "Dirty beige tile surface for lower walls or a small utility corner. Repeat modestly; strong aged staining is already present.",
+      "material": {
+        "roughness": 0.87,
+        "metalness": 0
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true,
+      "path_hash": "18e96369eaf6d30c",
+      "package_offset": 10421517470,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "f236669c862333653a26f1008f908204aff09afd0e13383e46d3ae7cde38be0e",
+      "tex_sha256": "f236669c862333653a26f1008f908204aff09afd0e13383e46d3ae7cde38be0e",
+      "png_sha256": "c4cbca5a9ba9b04de7ea86664f4d6df63f64ad558eb39d8cd25bfa6d61cabb77",
+      "png_bytes": 1788530,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Aged beige tile squares with dark seams and staining. Full resolution inspected; plausible enclosed-room lower wall."
+      }
+    },
+    {
+      "file": "mascot-fabric.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/fabric_rough_aligned_00_000/fabric_rough_aligned_00_000_albm.tex.30",
+      "usage": "Brown woven cloth for the seated/chasing bunny and toy fabric. Fine weave; moderate repeats and high roughness.",
+      "material": {
+        "roughness": 0.96,
+        "metalness": 0
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true,
+      "path_hash": "3b507da3cff5fae0",
+      "package_offset": 7264052771,
+      "packed_bytes": 828097,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "67a291fca07d1033aa728cea9ea13cfc6eedf23750c7c54d0820556371b25563",
+      "tex_sha256": "8d3799f85f28282585c5bacc9b3e60c5e6c594d3f59456869586782c6ee0b048",
+      "png_sha256": "7f6f5346f599a644c37e5cdc2e6097e97ee5dff8cad83d9717dc1ad88a5537ae",
+      "png_bytes": 2130292,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Brown rough woven cloth with fine visible fibers. Full resolution inspected; suitable plush-mascot fabric."
+      }
+    },
+    {
+      "file": "peeling-wall.png",
+      "internal_name": "natives/stm/streaming/materiallibrary/original/surface/wall_painted_01_000/ms_wall_painted_01_000_albm.tex.30",
+      "usage": "Flaking pale paint over gray plaster for worn upper walls and ceiling details. Use muted tint, keep spotlight-readable.",
+      "material": {
+        "roughness": 0.95,
+        "metalness": 0
+      },
+      "tex_version": 30,
+      "dxgi_format": 99,
+      "source_dimensions": [
+        1024,
+        1024
+      ],
+      "source_mip_count": 8,
+      "top_mip_bytes": 1048576,
+      "alpha_discarded": true,
+      "path_hash": "ca7b6fa6f1ef9a53",
+      "package_offset": 10629241582,
+      "packed_bytes": 1398248,
+      "unpacked_bytes": 1398248,
+      "compressed_sha256": "3a49577b76a412637ddb122b5dd0efc21ecf7ceb85712996c9b67cf4d20d78b3",
+      "tex_sha256": "3a49577b76a412637ddb122b5dd0efc21ecf7ceb85712996c9b67cf4d20d78b3",
+      "png_sha256": "7b552fa32239f6160a7b90caab86583caeb0a8702d4ee7ac22da038c13df36c2",
+      "png_bytes": 1669127,
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "color_space": "sRGB",
+      "visual_review": {
+        "status": "pass",
+        "date": "2026-11-15",
+        "method": "view_image: inspected exported full-resolution PNG",
+        "observation": "Pale cracked/chipped paint exposing gray plaster. Full resolution inspected; strong flashlight-readable wall detail."
+      }
+    }
+  ],
+  "source_index": {
+    "file_count": 87481,
+    "header_sha256": "ab11fc55ef24514e61b4d773c33fe415e476f591bbbe120f7a5f9e4e2a7619d8",
+    "index_sha256": "2f9df9e390f03de607b6bc2f0627dcd09f555815a6c246a6a6e3da8f2dae45b9",
+    "fingerprint": 247284855
+  },
+  "total_png_bytes": 9020130
+}
